@@ -1,0 +1,1772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ukubona LLC — SIB Roundtable · ukb-0-method-sib-dt-v00</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&family=Unbounded:wght@200;400;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --void: #03020a;
+  --deep: #07051a;
+  --surface: #0d0b24;
+  --iris: #2a1f6e;
+  --violet: #4b35c0;
+  --electric: #6c4ff5;
+  --pulse: #8b6ef7;
+  --ghost: #c4b5fd;
+  --gold: #f5c842;
+  --amber: #f59e0b;
+  --ember: #ef4444;
+  --teal: #14b8a6;
+  --cyan: #06b6d4;
+  --white: #f8f7ff;
+  --muted: #9090b0;
+  --faint: #3a3860;
+
+  --font-display: 'Unbounded', sans-serif;
+  --font-body: 'Cormorant Garamond', serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--void);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.75;
+  overflow-x: hidden;
+}
+
+/* ── GRAIN OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.6;
+}
+
+/* ── NEBULA BACKGROUND ── */
+.nebula {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+.nebula::before {
+  content: '';
+  position: absolute;
+  width: 120vw;
+  height: 120vh;
+  top: -20vh;
+  left: -10vw;
+  background: radial-gradient(ellipse 60% 40% at 30% 20%, rgba(74,53,192,0.18) 0%, transparent 60%),
+              radial-gradient(ellipse 40% 60% at 80% 70%, rgba(108,79,245,0.12) 0%, transparent 50%),
+              radial-gradient(ellipse 50% 30% at 60% 10%, rgba(20,184,166,0.06) 0%, transparent 50%);
+  animation: nebula-drift 40s ease-in-out infinite alternate;
+}
+.nebula::after {
+  content: '';
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(ellipse 30% 50% at 90% 40%, rgba(245,200,66,0.05) 0%, transparent 50%),
+              radial-gradient(ellipse 40% 40% at 10% 80%, rgba(239,68,68,0.04) 0%, transparent 50%);
+}
+@keyframes nebula-drift {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  100% { transform: translate(3vw, 2vh) rotate(2deg); }
+}
+
+/* ── LAYOUT ── */
+.wrapper {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* ── HEADER ── */
+header {
+  position: relative;
+  padding: 8rem 0 4rem;
+  text-align: center;
+  overflow: hidden;
+}
+
+.eye-container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 3rem;
+}
+
+.eye-svg {
+  width: 100%;
+  height: 100%;
+  animation: eye-blink 8s ease-in-out infinite;
+}
+
+@keyframes eye-blink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.05); }
+}
+
+.eye-glow {
+  position: absolute;
+  inset: -20px;
+  background: radial-gradient(circle, rgba(108,79,245,0.4) 0%, transparent 70%);
+  animation: pulse-glow 3s ease-in-out infinite alternate;
+}
+@keyframes pulse-glow {
+  0% { opacity: 0.5; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1.05); }
+}
+
+.catalog-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  color: var(--electric);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  opacity: 0;
+  animation: fade-up 1s ease 0.3s forwards;
+}
+
+h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.0;
+  background: linear-gradient(135deg, var(--white) 0%, var(--ghost) 50%, var(--pulse) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+  opacity: 0;
+  animation: fade-up 1s ease 0.5s forwards;
+}
+
+.header-sub {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 1.3rem;
+  color: var(--muted);
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  opacity: 0;
+  animation: fade-up 1s ease 0.7s forwards;
+}
+
+.preface-quote {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--teal);
+  border: 1px solid rgba(20,184,166,0.3);
+  padding: 0.75rem 1.5rem;
+  border-radius: 2px;
+  margin-top: 1rem;
+  opacity: 0;
+  animation: fade-up 1s ease 0.9s forwards;
+}
+.preface-quote span { color: var(--muted); }
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── SECTION HEADERS ── */
+.round-header {
+  position: relative;
+  padding: 5rem 0 2rem;
+}
+
+.round-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  color: var(--electric);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.round-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 200;
+  color: var(--white);
+  letter-spacing: -0.01em;
+}
+
+.round-line {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, var(--violet), transparent);
+  margin-top: 1.5rem;
+}
+
+/* ── RIDDLE BLOCK ── */
+.riddle-block {
+  background: linear-gradient(135deg, rgba(42,31,110,0.6) 0%, rgba(13,11,36,0.8) 100%);
+  border: 1px solid rgba(108,79,245,0.3);
+  border-left: 3px solid var(--electric);
+  padding: 3rem;
+  border-radius: 4px;
+  margin: 2rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.riddle-block::before {
+  content: '#riddle';
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--faint);
+  letter-spacing: 0.1em;
+}
+
+.riddle-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.riddle-line {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  font-size: 1.4rem;
+}
+
+.riddle-word {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: var(--ghost);
+  min-width: 120px;
+}
+
+.riddle-emoji {
+  font-size: 1.8rem;
+  filter: drop-shadow(0 0 8px rgba(108,79,245,0.6));
+}
+
+/* ── PARTICIPANT CARDS ── */
+.participants-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+@media (max-width: 700px) {
+  .participants-grid { grid-template-columns: 1fr; }
+}
+
+.participant-card {
+  background: var(--surface);
+  border: 1px solid var(--faint);
+  border-radius: 4px;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.participant-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--violet);
+}
+
+.participant-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+}
+
+.card-google::before { background: linear-gradient(90deg, #4285f4, #34a853, #fbbc04, #ea4335); }
+.card-openai::before { background: linear-gradient(90deg, #10a37f, #1a7f64); }
+.card-anthropic::before { background: linear-gradient(90deg, var(--electric), var(--pulse)); }
+.card-xai::before { background: linear-gradient(90deg, #ffffff, #888888); }
+
+.participant-name {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.name-google { color: #4285f4; }
+.name-openai { color: #10a37f; }
+.name-anthropic { color: var(--pulse); }
+.name-xai { color: #aaaaaa; }
+
+.participant-eigenmode {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--gold);
+  margin-bottom: 1rem;
+}
+
+.participant-answer {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.participant-answer strong {
+  color: var(--white);
+  font-weight: 600;
+}
+
+.card-verdict {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--faint);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+}
+
+/* ── VERSE REVELATION ── */
+.verse-reveal {
+  background: linear-gradient(135deg, rgba(42,31,110,0.4), rgba(7,5,26,0.9));
+  border: 1px solid rgba(245,200,66,0.2);
+  border-radius: 4px;
+  padding: 3rem;
+  margin: 3rem 0;
+  position: relative;
+  text-align: center;
+}
+
+.verse-text {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  line-height: 1.8;
+  color: var(--gold);
+  margin-bottom: 2rem;
+}
+
+.verse-ref {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+  letter-spacing: 0.2em;
+}
+
+.verse-mapping {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+  text-align: left;
+}
+
+.verse-map-item {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--faint);
+  padding: 1rem;
+  border-radius: 3px;
+}
+
+.verse-map-emoji { font-size: 1.5rem; margin-bottom: 0.5rem; }
+.verse-map-key { font-family: var(--font-mono); font-size: 0.65rem; color: var(--gold); }
+.verse-map-val { font-size: 0.9rem; color: var(--muted); margin-top: 0.25rem; }
+
+/* ── EIGENMODE TABLE ── */
+.eigenmode-table-wrap {
+  overflow-x: auto;
+  margin: 2rem 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+th {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--electric);
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--violet);
+  text-align: left;
+}
+
+td {
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid rgba(58,56,96,0.5);
+  vertical-align: top;
+  color: var(--muted);
+}
+
+tr:hover td { background: rgba(74,53,192,0.08); }
+
+td:first-child { color: var(--white); font-weight: 600; font-family: var(--font-display); font-size: 0.75rem; letter-spacing: 0.1em; }
+
+/* ── TMVES STACK ── */
+.tmves-stack {
+  margin: 3rem 0;
+  position: relative;
+}
+
+.tmves-item {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 0;
+  margin-bottom: 0;
+  border: 1px solid var(--faint);
+  border-bottom: none;
+  position: relative;
+  transition: background 0.2s ease;
+}
+
+.tmves-item:first-child { border-radius: 4px 4px 0 0; }
+.tmves-item:last-child { border-bottom: 1px solid var(--faint); border-radius: 0 0 4px 4px; }
+.tmves-item:hover { background: rgba(74,53,192,0.08); }
+
+.tmves-label {
+  padding: 1.5rem;
+  border-right: 1px solid var(--faint);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.tmves-letter {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.tmves-name {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.tmves-body {
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 1rem;
+  align-items: center;
+}
+
+@media (max-width: 700px) {
+  .tmves-item { grid-template-columns: 1fr; }
+  .tmves-body { grid-template-columns: 1fr 1fr; }
+}
+
+.tmves-field { }
+.tmves-field-label { font-family: var(--font-mono); font-size: 0.6rem; color: var(--faint); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.25rem; }
+.tmves-field-val { font-size: 0.9rem; color: var(--white); }
+
+.t-item .tmves-letter { color: var(--cyan); }
+.m-item .tmves-letter { color: var(--pulse); }
+.v-item .tmves-letter { color: var(--gold); }
+.e-item .tmves-letter { color: var(--ember); }
+.s-item .tmves-letter { color: var(--teal); }
+
+/* ── PIPELINE ── */
+.pipeline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin: 3rem 0;
+  flex-wrap: wrap;
+}
+
+.pipeline-node {
+  background: var(--surface);
+  border: 1px solid var(--faint);
+  padding: 1rem 1.5rem;
+  text-align: center;
+  position: relative;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+  cursor: default;
+}
+
+.pipeline-node:hover {
+  border-color: var(--electric);
+  transform: translateY(-2px);
+}
+
+.pipeline-node-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.25rem;
+}
+
+.pipeline-node-name {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.pipeline-arrow {
+  font-size: 1.2rem;
+  color: var(--faint);
+  padding: 0 0.5rem;
+  flex-shrink: 0;
+}
+
+.node-customer .pipeline-node-name { color: var(--gold); }
+.node-sib .pipeline-node-name { color: var(--electric); }
+.node-dt .pipeline-node-name { color: var(--teal); }
+.node-llm .pipeline-node-name { color: var(--pulse); }
+.node-decision .pipeline-node-name { color: var(--amber); }
+
+/* ── POWER INVARIANT ── */
+.power-section {
+  background: linear-gradient(135deg, rgba(20,184,166,0.08), rgba(13,11,36,0.95));
+  border: 1px solid rgba(20,184,166,0.25);
+  border-radius: 4px;
+  padding: 3rem;
+  margin: 3rem 0;
+}
+
+.power-equation {
+  font-family: var(--font-mono);
+  font-size: clamp(1.1rem, 3vw, 1.8rem);
+  color: var(--teal);
+  text-align: center;
+  margin: 1.5rem 0;
+  letter-spacing: 0.05em;
+}
+
+.power-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+@media (max-width: 600px) { .power-grid { grid-template-columns: 1fr; } }
+
+.power-node {
+  text-align: center;
+  padding: 1.5rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(20,184,166,0.2);
+  border-radius: 4px;
+}
+
+.power-node-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+.power-node-label { font-family: var(--font-display); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin-bottom: 0.5rem; }
+.power-node-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.5; }
+
+/* ── DATA ACTIVITIES ── */
+.activity-list {
+  margin: 1.5rem 0;
+}
+
+.activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(58,56,96,0.4);
+}
+
+.activity-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--teal);
+  margin-top: 0.5rem;
+  flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(20,184,166,0.6);
+}
+
+.activity-text {
+  font-size: 1rem;
+  color: var(--muted);
+}
+.activity-text strong { color: var(--white); }
+
+/* ── QUOTE BLOCKS ── */
+.pull-quote {
+  border-left: 2px solid var(--electric);
+  padding: 1rem 2rem;
+  margin: 2rem 0;
+  background: rgba(74,53,192,0.08);
+}
+
+.pull-quote p {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 1.15rem;
+  color: var(--ghost);
+  line-height: 1.7;
+}
+
+.pull-quote .attribution {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--electric);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-top: 0.75rem;
+  font-style: normal;
+}
+
+/* ── INSIGHT CARDS ── */
+.insight-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+@media (max-width: 600px) { .insight-grid { grid-template-columns: 1fr; } }
+
+.insight-card {
+  padding: 1.5rem;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--faint);
+  border-radius: 3px;
+}
+
+.insight-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.insight-text { font-size: 0.95rem; color: var(--muted); line-height: 1.6; }
+.insight-text strong { color: var(--white); }
+
+/* ── BRAIN COMPRESSION ── */
+.compression-visual {
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.compression-row {
+  display: grid;
+  grid-template-columns: 100px 1fr 120px 120px;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--faint);
+  border-radius: 3px;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 600px) { .compression-row { grid-template-columns: 1fr 1fr; } }
+
+.comp-model { font-family: var(--font-display); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; }
+.comp-bar-wrap { background: var(--faint); border-radius: 2px; height: 4px; }
+.comp-bar { height: 4px; border-radius: 2px; }
+.comp-label { font-family: var(--font-mono); font-size: 0.65rem; color: var(--muted); }
+.comp-halluc { font-family: var(--font-mono); font-size: 0.65rem; text-align: right; }
+
+/* ── VERSE SUBSTITUTION ── */
+.verse-substitution {
+  margin: 2rem 0;
+}
+
+.sub-line {
+  display: flex;
+  gap: 1rem;
+  align-items: baseline;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(58,56,96,0.3);
+}
+
+.sub-original {
+  font-style: italic;
+  color: var(--muted);
+  font-size: 0.95rem;
+  min-width: 200px;
+  flex-shrink: 0;
+}
+
+.sub-arrow { color: var(--electric); font-family: var(--font-mono); font-size: 0.8rem; }
+
+.sub-ukubona {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--ghost);
+}
+
+/* ── FINAL FORMULA ── */
+.formula-block {
+  background: var(--deep);
+  border: 1px solid rgba(108,79,245,0.4);
+  border-radius: 4px;
+  padding: 3rem;
+  margin: 3rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.formula-block::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(108,79,245,0.1) 0%, transparent 70%);
+}
+
+.formula-text {
+  font-family: var(--font-mono);
+  font-size: clamp(0.85rem, 2vw, 1.1rem);
+  color: var(--ghost);
+  line-height: 2;
+  position: relative;
+}
+
+.formula-highlight { color: var(--electric); font-weight: 500; }
+.formula-gold { color: var(--gold); }
+.formula-teal { color: var(--teal); }
+
+/* ── ZINGER BLOCKS ── */
+.zinger {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 3vw, 2rem);
+  font-weight: 200;
+  color: var(--white);
+  line-height: 1.4;
+  padding: 2rem 0;
+  position: relative;
+}
+
+.zinger::before {
+  content: '"';
+  font-size: 4rem;
+  color: var(--electric);
+  opacity: 0.3;
+  position: absolute;
+  top: -1rem;
+  left: -0.5rem;
+  font-family: var(--font-body);
+  font-style: italic;
+  line-height: 1;
+}
+
+/* ── ROUTING CODE ── */
+.code-block {
+  background: rgba(0,0,0,0.4);
+  border: 1px solid var(--faint);
+  border-radius: 4px;
+  padding: 2rem;
+  margin: 2rem 0;
+  overflow-x: auto;
+}
+
+.code-block pre {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.code-keyword { color: var(--electric); }
+.code-string { color: var(--gold); }
+.code-comment { color: var(--faint); font-style: italic; }
+.code-func { color: var(--teal); }
+.code-num { color: var(--amber); }
+
+/* ── CATALOG FOOTER ── */
+footer {
+  padding: 6rem 0 4rem;
+  text-align: center;
+  border-top: 1px solid var(--faint);
+  margin-top: 6rem;
+}
+
+.footer-eye {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  animation: eye-blink 8s ease-in-out infinite;
+  display: inline-block;
+  filter: drop-shadow(0 0 20px rgba(108,79,245,0.6));
+}
+
+.footer-catalog {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  color: var(--faint);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.footer-name {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 200;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+}
+
+/* ── SCROLL REVEAL ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── DIVIDER ── */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--faint), transparent);
+  margin: 4rem 0;
+}
+
+/* ── SECTION PROSE ── */
+.prose {
+  font-size: 1.05rem;
+  line-height: 1.85;
+  color: var(--muted);
+  max-width: 800px;
+}
+
+.prose strong { color: var(--white); font-weight: 600; }
+.prose em { color: var(--ghost); }
+
+/* ── TABS for Round II analysis ── */
+.model-tabs {
+  margin: 2rem 0;
+}
+
+.tab-buttons {
+  display: flex;
+  border-bottom: 1px solid var(--faint);
+  margin-bottom: 0;
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+  margin-bottom: -1px;
+}
+
+.tab-btn.active { color: var(--electric); border-bottom-color: var(--electric); }
+.tab-btn:hover { color: var(--ghost); }
+
+.tab-panel {
+  display: none;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--faint);
+  border-top: none;
+  padding: 2rem;
+}
+
+.tab-panel.active { display: block; }
+
+/* ── BONIFACE MEMORIAL ── */
+.boniface-block {
+  background: linear-gradient(135deg, rgba(245,200,66,0.06), rgba(7,5,26,0.95));
+  border: 1px solid rgba(245,200,66,0.2);
+  border-radius: 4px;
+  padding: 2.5rem;
+  margin: 2rem 0;
+}
+
+.boniface-name {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--gold);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.boniface-dates {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+  letter-spacing: 0.15em;
+  margin-bottom: 1rem;
+}
+
+.boniface-text {
+  font-size: 1rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+/* ── CONSTRAINT TABLE ── */
+.constraint-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+@media (max-width: 600px) { .constraint-grid { grid-template-columns: 1fr; } }
+
+.constraint-box {
+  padding: 1.5rem;
+  border-radius: 4px;
+}
+
+.constraint-cog {
+  background: rgba(108,79,245,0.1);
+  border: 1px solid rgba(108,79,245,0.3);
+}
+
+.constraint-som {
+  background: rgba(20,184,166,0.08);
+  border: 1px solid rgba(20,184,166,0.3);
+}
+
+.constraint-title {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.cog-title { color: var(--pulse); }
+.som-title { color: var(--teal); }
+
+.constraint-items { list-style: none; }
+.constraint-items li {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+  padding: 0.4rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  display: flex;
+  gap: 0.75rem;
+}
+.constraint-items li::before { content: '→'; color: var(--faint); }
+</style>
+</head>
+
+<body>
+
+<div class="nebula"></div>
+
+<div class="wrapper">
+
+<!-- ══════════ HEADER ══════════ -->
+<header>
+  <div class="eye-container">
+    <div class="eye-glow"></div>
+    <svg class="eye-svg" viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M5 30 Q50 5 95 30 Q50 55 5 30Z" fill="rgba(42,31,110,0.6)" stroke="rgba(108,79,245,0.8)" stroke-width="1"/>
+      <circle cx="50" cy="30" r="14" fill="rgba(13,11,36,0.9)" stroke="rgba(108,79,245,0.6)" stroke-width="1"/>
+      <circle cx="50" cy="30" r="8" fill="rgba(108,79,245,0.9)"/>
+      <circle cx="50" cy="30" r="4" fill="rgba(7,5,26,1)"/>
+      <circle cx="53" cy="27" r="1.5" fill="rgba(255,255,255,0.6)"/>
+      <path d="M5 30 Q50 5 95 30" stroke="rgba(108,79,245,0.3)" stroke-width="0.5" fill="none"/>
+      <path d="M5 30 Q50 55 95 30" stroke="rgba(108,79,245,0.3)" stroke-width="0.5" fill="none"/>
+    </svg>
+  </div>
+
+  <div class="catalog-tag">ukubona llc · ukb-0-method-sib-dt-v00 · sovereign intelligence broker</div>
+  <h1>The Roundtable</h1>
+  <p class="header-sub">From riddle to architecture — five rounds that built the SIB</p>
+  <div class="preface-quote">
+    "The more a system compresses, the more it must infer missing detail during reconstruction."
+    <span>— OpenAI</span>
+  </div>
+</header>
+
+<!-- ══════════ ROUND I ══════════ -->
+<section class="reveal">
+  <div class="round-header">
+    <div class="round-label">Round I</div>
+    <div class="round-title">The Probe</div>
+    <div class="round-line"></div>
+  </div>
+
+  <p class="prose" style="margin-bottom: 2rem;">An underdetermined signal — five lines, seven tokens — sent simultaneously to four weight matrices. Not a riddle. A differential diagnostic.</p>
+
+  <div class="riddle-block">
+    <div class="riddle-lines">
+      <div class="riddle-line">
+        <div class="riddle-word">Eye</div>
+        <div class="riddle-emoji">👁️</div>
+      </div>
+      <div class="riddle-line">
+        <div class="riddle-word">Run</div>
+        <div class="riddle-emoji">🏃🏾 🌎</div>
+      </div>
+      <div class="riddle-line">
+        <div class="riddle-word">Strong</div>
+        <div class="riddle-emoji">💪🏾</div>
+      </div>
+      <div class="riddle-line">
+        <div class="riddle-word">Heart</div>
+        <div class="riddle-emoji">🫀</div>
+      </div>
+      <div class="riddle-line">
+        <div class="riddle-word">Perfect</div>
+        <div class="riddle-emoji">🐑 vs 🐐</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="participants-grid">
+
+    <div class="participant-card card-google">
+      <div class="participant-name name-google">Google</div>
+      <div class="participant-eigenmode">EIGENMODE: Canonical Retrieval · V-Layer</div>
+      <div class="participant-answer">
+        Identified <strong>2 Chronicles 16:9</strong> immediately. The eyes of the Lord run to and fro throughout the earth, to show Himself strong on behalf of those whose heart is perfect toward Him. Then — the sheep vs goat judgment: Matthew 25:31–46.
+      </div>
+      <div class="card-verdict" style="color: var(--gold);">
+        ✓ Richest answer. Textual gravity at work.
+      </div>
+    </div>
+
+    <div class="participant-card card-openai">
+      <div class="participant-name name-openai">OpenAI</div>
+      <div class="participant-eigenmode">EIGENMODE: Structural Compression · E-Layer</div>
+      <div class="participant-answer">
+        Ignored culture entirely. Forced phonetics: I + ran + arm + core → <strong>"AMERICAN"</strong> (anagram). A fascinating wrong answer because it is internally consistent. That is what makes it dangerous.
+      </div>
+      <div class="card-verdict" style="color: var(--ember);">
+        ✗ Solved the wrong problem elegantly.
+      </div>
+    </div>
+
+    <div class="participant-card card-anthropic">
+      <div class="participant-name name-anthropic">Anthropic</div>
+      <div class="participant-eigenmode">EIGENMODE: Surface Coherence · S-Layer</div>
+      <div class="participant-answer">
+        Processed left-to-right. Produced: <strong>"I run the world with a strong heart — the perfect GOAT."</strong> Most readable. Least resonant. Alignment training flattens depth.
+      </div>
+      <div class="card-verdict" style="color: var(--muted);">
+        ∅ Safe. Correct in its own frame. Hollow.
+      </div>
+    </div>
+
+    <div class="participant-card card-xai">
+      <div class="participant-name name-xai">xAI / Grok</div>
+      <div class="participant-eigenmode">EIGENMODE: Cultural Salience · M-Layer</div>
+      <div class="participant-answer">
+        Locked onto the highest-signal modern attractor: <strong>Beyoncé</strong>. "Run the World" + Flawless + GOAT. Reasonable geodesic. Most likely to <em>feel</em> satisfying without being true.
+      </div>
+      <div class="card-verdict" style="color: var(--pulse);">
+        ≈ Correct for its temporal layer. Wrong timescale.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════ VERSE ══════════ -->
+<section class="reveal">
+  <div class="verse-reveal">
+    <div class="verse-text">
+      "For the eyes of the Lord run to and fro throughout the whole earth, to shew himself strong in the behalf of them whose heart is perfect toward him."
+    </div>
+    <div class="verse-ref">2 Chronicles 16:9 · KJV</div>
+
+    <div class="verse-mapping">
+      <div class="verse-map-item">
+        <div class="verse-map-emoji">👁️</div>
+        <div class="verse-map-key">Eye</div>
+        <div class="verse-map-val">The eyes of the Lord</div>
+      </div>
+      <div class="verse-map-item">
+        <div class="verse-map-emoji">🏃🏾 🌎</div>
+        <div class="verse-map-key">Run + Earth</div>
+        <div class="verse-map-val">run to and fro throughout the whole earth</div>
+      </div>
+      <div class="verse-map-item">
+        <div class="verse-map-emoji">💪🏾</div>
+        <div class="verse-map-key">Strong</div>
+        <div class="verse-map-val">shew himself strong</div>
+      </div>
+      <div class="verse-map-item">
+        <div class="verse-map-emoji">🫀</div>
+        <div class="verse-map-key">Heart Perfect</div>
+        <div class="verse-map-val">them whose heart is perfect toward him</div>
+      </div>
+      <div class="verse-map-item">
+        <div class="verse-map-emoji">🐑 vs 🐐</div>
+        <div class="verse-map-key">Judgment</div>
+        <div class="verse-map-val">Matthew 25: sheep vs goat separation</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ ROUND II ══════════ -->
+<section class="reveal">
+  <div class="round-header">
+    <div class="round-label">Round II</div>
+    <div class="round-title">The Eigenmodes</div>
+    <div class="round-line"></div>
+  </div>
+
+  <div class="pull-quote">
+    <p>Each model reveals its objective function by how it resolves ambiguity.</p>
+    <div class="attribution">— OpenAI · Round II</div>
+  </div>
+
+  <div class="eigenmode-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th>Eigenmode</th>
+          <th>What it seeks</th>
+          <th>Optimizes for</th>
+          <th>Shadow</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="color:#4285f4">Google</td>
+          <td>Canon / Scripture</td>
+          <td>Truth as precedent</td>
+          <td>Authority</td>
+          <td>Hallucinates scripture even for clinical prompts</td>
+        </tr>
+        <tr>
+          <td style="color:#10a37f">OpenAI</td>
+          <td>Structure / Logic</td>
+          <td>Truth as solvability</td>
+          <td>Formal elegance</td>
+          <td>Solves the wrong problem confidently</td>
+        </tr>
+        <tr>
+          <td style="color:var(--pulse)">Anthropic</td>
+          <td>Language / Safety</td>
+          <td>Truth as coherence</td>
+          <td>Interpretability</td>
+          <td>Depth sacrificed on the altar of harmlessness</td>
+        </tr>
+        <tr>
+          <td style="color:#aaa">xAI</td>
+          <td>Culture / Power</td>
+          <td>Truth as relevance</td>
+          <td>Salience</td>
+          <td>Chases novelty when prompt is ancient or clinical</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="insight-grid" style="margin-top:2rem;">
+    <div class="insight-card">
+      <div class="insight-label" style="color:var(--electric)">The Manifold</div>
+      <div class="insight-text">Same symbols. Same tokens. Same underdetermined input. The divergence isn't a bug — <strong>it's the feature</strong>. The spread is the signal.</div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-label" style="color:var(--gold)">The Diagnostic</div>
+      <div class="insight-text">Not "who is right." But <strong>who moves how</strong>. What each system cannot help but do. The riddle exposed the telos of each weight matrix.</div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-label" style="color:var(--teal)">The Geodesics</div>
+      <div class="insight-text">Each model traces a different <strong>shortest path</strong> across the manifold. Textual gravity. Symbolic compression. Surface coherence. Cultural field.</div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-label" style="color:var(--amber)">Portfolio Allocation</div>
+      <div class="insight-text">You're not choosing answers. You're choosing <strong>which geodesic to ride</strong>. Google = authority. OpenAI = machinery. Anthropic = alignment. xAI = attention.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ ROUND III ══════════ -->
+<section class="reveal">
+  <div class="round-header">
+    <div class="round-label">Round III</div>
+    <div class="round-title">The TMVES Stack</div>
+    <div class="round-line"></div>
+  </div>
+
+  <p class="prose" style="margin-bottom: 2rem;">The insight that the experiment was always a company. Time determines the right cognitive tool — not capability, not price. <strong>Timescale.</strong></p>
+
+  <div class="tmves-stack">
+    <div class="tmves-item t-item">
+      <div class="tmves-label">
+        <div class="tmves-letter">T</div>
+        <div class="tmves-name">Tensor</div>
+      </div>
+      <div class="tmves-body">
+        <div class="tmves-field">
+          <div class="tmves-field-label">Clinical Context</div>
+          <div class="tmves-field-val">Inpatient / Operational</div>
+        </div>
+        <div class="tmves-field">
+          <div class="tmves-field-label">Time Scale</div>
+          <div class="tmves-field-val">Continuous</div>
+        </div>
+        <div class="tmves-field">
+          <div class="tmves-field-label">Resolution</div>
+          <div class="tmves-field-val">Individual</div>
+        </div>
+        <div class="tmves-field">
+          <div class="tmves-field-label">LLM Lens</div>
+          <div class="tmves-field-val" style="color:var(--cyan)">All models weighted</div>
+        </div>
+      </div>
+    </div>
+    <div class="tmves-item m-item">
+      <div class="tmves-label">
+        <div class="tmves-letter">M</div>
+        <div class="tmves-name">Matrix</div>
+      </div>
+      <div class="tmves-body">
+        <div class="tmves-field">
+          <div class="tmves-field-label">Clinical Context</div>
+          <div class="tmves-field-val">Outpatient / Strategic</div>
+        </div>
+        <div class="tmves-field">
+          <div class="tmves-field-label">Time Scale</div>
+          <div class="tmves-field-val">Months–Years</div>
+        </div>
+        <div class="tmves-field">
+          <div class="tmves-field-label">Resolution</div>
+          <div class="tmves-field-val">[Kin]-Network</div>
+        </div>
+        <div class="tmves-field">
+          <div class="tmves-field-label">LLM Lens</div>
+          <div class="tmves-field-val" style="color:var(--pulse)">xAI / Grok</div>
+        </div>
+      </div>
+    </div>
+    <div class="tmves-item v-item">
+      <div class="tmves-label">
+        <div class="tmves-letter">V</div>
+        <div class="tmves-name">Vector</div>
+      </div>
+      <div class="tmves-body">
+        <div class="tmves-field">
+          <div class="tmves-field-label">Clinical Context</div>
+          <div class="tmves-field-val">Urgent / Ritual</div>
+        </div>
+        <div class="tmves-field">
+          <div class="tmves-field-label">Time Scale</div>
+          <div class="tmves-field-val">Days–Weeks</div>
+        </div>
+        <div class="tmves-field">
+          <div class="tmves-field-label">Resolution</div>
+          <div class="tmves-field-val">Systems</div>
+        </div>
+        <div class="tmves-field">
+          <div class="tmves-field-label">LLM Lens</div>
+          <div class="tmves-field-val" style="color:var(--gold)">Google</div>
+        </div>
+      </div>
+    </div>
+    <div class="tmves-item e-item">
+      <div class="tmves-label">
+        <div class="tmves-letter">E</div>
+        <div class="tmves-name">Eigenmode</div>
+      </div>
+      <div class="tmves-body">
+        <div class="tmves-field">
+          <div class="tmves-field-label">Clinical Context</div>
+          <div class="tmves-field-val">Emergency / Existential</div>
+        </div>
+        <div class="tmves-field">
+          <div class="tmves-field-label">Time Scale</div>
+          <div class="tmves-field-val">Minutes–Hours</div>
+        </div>
+        <div class="tmves-field">
+          <div class="tmves-field-label">Resolution</div>
+          <div class="tmves-field-val">National Scorecard</div>
+        </div>
+        <div class="tmves-field">
+          <div class="tmves-field-label">LLM Lens</div>
+          <div class="tmves-field-val" style="color:var(--ember)">OpenAI</div>
+        </div>
+      </div>
+    </div>
+    <div class="tmves-item s-item">
+      <div class="tmves-label">
+        <div class="tmves-letter">S</div>
+        <div class="tmves-name">Scalar</div>
+      </div>
+      <div class="tmves-body">
+        <div class="tmves-field">
+          <div class="tmves-field-label">Clinical Context</div>
+          <div class="tmves-field-val">First Aid / Tactical</div>
+        </div>
+        <div class="tmves-field">
+          <div class="tmves-field-label">Time Scale</div>
+          <div class="tmves-field-val">Seconds–Minutes</div>
+        </div>
+        <div class="tmves-field">
+          <div class="tmves-field-label">Resolution</div>
+          <div class="tmves-field-val">Civilizational</div>
+        </div>
+        <div class="tmves-field">
+          <div class="tmves-field-label">LLM Lens</div>
+          <div class="tmves-field-val" style="color:var(--teal)">Anthropic</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pull-quote" style="margin-top:2.5rem;">
+    <p>The danger isn't a wrong answer. It's a correct answer at the wrong timescale.</p>
+    <div class="attribution">— Anthropic · Round III</div>
+  </div>
+</section>
+
+<!-- ══════════ THE SIB PIPELINE ══════════ -->
+<section class="reveal">
+  <div class="round-header">
+    <div class="round-label">Architecture</div>
+    <div class="round-title">The SIB Pipeline</div>
+    <div class="round-line"></div>
+  </div>
+
+  <div class="pipeline">
+    <div class="pipeline-node node-customer">
+      <div class="pipeline-node-label">Entry</div>
+      <div class="pipeline-node-name">Customer</div>
+    </div>
+    <div class="pipeline-arrow">→</div>
+    <div class="pipeline-node node-sib">
+      <div class="pipeline-node-label">Ukubona Eye</div>
+      <div class="pipeline-node-name">SIB</div>
+    </div>
+    <div class="pipeline-arrow">→</div>
+    <div class="pipeline-node node-dt">
+      <div class="pipeline-node-label">The Retina</div>
+      <div class="pipeline-node-name">Digital Twin</div>
+    </div>
+    <div class="pipeline-arrow">→</div>
+    <div class="pipeline-node node-llm">
+      <div class="pipeline-node-label">Projector</div>
+      <div class="pipeline-node-name">LLM</div>
+    </div>
+    <div class="pipeline-arrow">→</div>
+    <div class="pipeline-node node-decision">
+      <div class="pipeline-node-label">Output</div>
+      <div class="pipeline-node-name">Decision</div>
+    </div>
+  </div>
+
+  <div class="constraint-grid">
+    <div class="constraint-box constraint-cog">
+      <div class="constraint-title cog-title">DT Cognitive</div>
+      <ul class="constraint-items">
+        <li>Compressed identity weights</li>
+        <li>Narrative + salience matrix</li>
+        <li>Beliefs, memory, prediction weights</li>
+        <li>Elicited via conversation + history</li>
+        <li>Optimizes for coherence</li>
+      </ul>
+    </div>
+    <div class="constraint-box constraint-som">
+      <div class="constraint-title som-title">DT Somatic</div>
+      <ul class="constraint-items">
+        <li>Power curve (d[Energy]/dt)</li>
+        <li>Hard constraint field — gates LLM</li>
+        <li>Blood pressure doesn't hallucinate</li>
+        <li>SpO₂ doesn't approximate</li>
+        <li>Optimizes for survival</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pull-quote">
+    <p>LLMs don't remember — they approximate. Digital Twins don't approximate — they remember. Ukubona decides when each is allowed to speak.</p>
+    <div class="attribution">— OpenAI · Round IV</div>
+  </div>
+</section>
+
+<!-- ══════════ ROUND V: BRAIN COMPRESSION ══════════ -->
+<section class="reveal">
+  <div class="round-header">
+    <div class="round-label">Round V · Coda</div>
+    <div class="round-title">The 20-Watt Brain</div>
+    <div class="round-line"></div>
+  </div>
+
+  <p class="prose" style="margin-bottom:2rem;">An 87-year-old brain fits a lifetime in ~1.4kg running at 20W — not by storing raw signal, but by learning the <strong>compression function itself</strong>. What survives isn't the footage. It's the weights.</p>
+
+  <div class="compression-visual">
+    <div class="compression-row">
+      <div class="comp-model" style="color:#4285f4">Google</div>
+      <div>
+        <div class="comp-bar-wrap"><div class="comp-bar" style="width:15%;background:#4285f4;"></div></div>
+      </div>
+      <div class="comp-label">Low compression · High recall</div>
+      <div class="comp-halluc" style="color:var(--teal)">Low hallucination</div>
+    </div>
+    <div class="compression-row">
+      <div class="comp-model" style="color:#10a37f">OpenAI</div>
+      <div>
+        <div class="comp-bar-wrap"><div class="comp-bar" style="width:90%;background:#10a37f;"></div></div>
+      </div>
+      <div class="comp-label">High compression · Low recall</div>
+      <div class="comp-halluc" style="color:var(--ember)">High reconstruction</div>
+    </div>
+    <div class="compression-row">
+      <div class="comp-model" style="color:#aaa">xAI</div>
+      <div>
+        <div class="comp-bar-wrap"><div class="comp-bar" style="width:55%;background:#888;"></div></div>
+      </div>
+      <div class="comp-label">Medium compression · High salience</div>
+      <div class="comp-halluc" style="color:var(--amber)">Narrative fill</div>
+    </div>
+    <div class="compression-row">
+      <div class="comp-model" style="color:var(--pulse)">Anthropic</div>
+      <div>
+        <div class="comp-bar-wrap"><div class="comp-bar" style="width:35%;background:var(--pulse);"></div></div>
+      </div>
+      <div class="comp-label">Constrained compression · Low risk</div>
+      <div class="comp-halluc" style="color:var(--muted)">Low surprise</div>
+    </div>
+  </div>
+
+  <div class="zinger">
+    LLM = 65 GB human. LLaMA 3 compresses the internet into 65 GB of weights the same way your father's mind compressed a lifetime into decaying but still-load-bearing rows.
+  </div>
+
+  <div class="pull-quote">
+    <p>Compression creates intelligence. Constraints create truth. Your system only works if it has both.</p>
+    <div class="attribution">— OpenAI · Round V</div>
+  </div>
+</section>
+
+<!-- ══════════ ROUND VI: POWER ══════════ -->
+<section class="reveal">
+  <div class="round-header">
+    <div class="round-label">Round VI</div>
+    <div class="round-title">The Somatic Invariant</div>
+    <div class="round-line"></div>
+  </div>
+
+  <div class="power-section">
+    <div class="round-label" style="margin-bottom:0.5rem;">The Body Speaks in Watts</div>
+    <div class="power-equation">Power = d[Energy] / dt</div>
+
+    <div class="power-grid">
+      <div class="power-node">
+        <div class="power-node-icon">🍽️</div>
+        <div class="power-node-label">Input</div>
+        <div class="power-node-desc">Metabolic substrate, sleep, nutrition. Outpatient / Matrix timescale.</div>
+      </div>
+      <div class="power-node">
+        <div class="power-node-icon">🫀</div>
+        <div class="power-node-label">Throughput</div>
+        <div class="power-node-desc">Cardiopulmonary efficiency, neuromuscular coordination. Urgent / Vector.</div>
+      </div>
+      <div class="power-node">
+        <div class="power-node-icon">⚡</div>
+        <div class="power-node-label">Output</div>
+        <div class="power-node-desc">Measured watts, sustained 20–45 min. Inpatient / Tensor stream.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="activity-list">
+    <div class="activity-item">
+      <div class="activity-dot"></div>
+      <div class="activity-text"><strong>Hiking Mgahinga</strong> — maximal Tensor stress test. The reserve surface under full load.</div>
+    </div>
+    <div class="activity-item">
+      <div class="activity-dot"></div>
+      <div class="activity-text"><strong>Walking 9 miles</strong> — sustained Matrix endurance. Shape of the power curve.</div>
+    </div>
+    <div class="activity-item">
+      <div class="activity-dot"></div>
+      <div class="activity-text"><strong>87-year-old father's power walks</strong> — the Scalar floor. Functional reserve expressed in the only currency that matters: work done against time.</div>
+    </div>
+    <div class="activity-item">
+      <div class="activity-dot"></div>
+      <div class="activity-text"><strong>20–45 min maintenance window</strong> — the eigenstructure. Peak power is interesting. <strong>Power maintenance is diagnostic.</strong> Frailty is when the curve collapses before the mark.</div>
+    </div>
+  </div>
+
+  <div class="pull-quote">
+    <p>The body does not reconstruct — it enforces. Blood pressure doesn't hallucinate. Oxygen saturation doesn't approximate. Pain doesn't compress elegantly. It constrains brutally.</p>
+    <div class="attribution">— OpenAI · Round V</div>
+  </div>
+</section>
+
+<!-- ══════════ BONIFACE ══════════ -->
+<section class="reveal">
+  <div class="round-header">
+    <div class="round-label">In Memoriam</div>
+    <div class="round-title">Boniface</div>
+    <div class="round-line"></div>
+  </div>
+
+  <div class="boniface-block">
+    <div class="boniface-name">Boniface</div>
+    <div class="boniface-dates">ukubona-llc.github.io/boniface</div>
+    <div class="boniface-text">
+      The page that reframes everything. The K08 from NIH/NIA (NIA-AG065520), the JAMA 2014 landmark, the Uganda Renal Atlas, the Public-Academic-Industry Triangle — the somatic invariant was always the goal. Power = d[Energy]/dt was never abstract. It was personal. The roundtable confirmed what was already known, in a new language.
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ VERSE SUBSTITUTION ══════════ -->
+<section class="reveal">
+  <div class="round-header">
+    <div class="round-label">The Self-Referential Close</div>
+    <div class="round-title">2 Chronicles 16:9 → Ukubona</div>
+    <div class="round-line"></div>
+  </div>
+
+  <div class="verse-substitution">
+    <div class="sub-line">
+      <div class="sub-original">The eyes of the Lord</div>
+      <div class="sub-arrow">→</div>
+      <div class="sub-ukubona">SIB routing logic</div>
+    </div>
+    <div class="sub-line">
+      <div class="sub-original">run to and fro throughout the earth</div>
+      <div class="sub-arrow">→</div>
+      <div class="sub-ukubona">TMVES temporal perspectivism</div>
+    </div>
+    <div class="sub-line">
+      <div class="sub-original">to shew himself strong</div>
+      <div class="sub-arrow">→</div>
+      <div class="sub-ukubona">correct lens at correct timescale · Power sustained</div>
+    </div>
+    <div class="sub-line">
+      <div class="sub-original">them whose heart is perfect</div>
+      <div class="sub-arrow">→</div>
+      <div class="sub-ukubona">monthly subscription · stable loss function · weights don't drift</div>
+    </div>
+    <div class="sub-line">
+      <div class="sub-original">toward him</div>
+      <div class="sub-arrow">→</div>
+      <div class="sub-ukubona">Ukubona LLC</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ ROUTING ENGINE ══════════ -->
+<section class="reveal">
+  <div class="round-header">
+    <div class="round-label">Architecture · Pseudocode</div>
+    <div class="round-title">The Routing Engine</div>
+    <div class="round-line"></div>
+  </div>
+
+  <div class="code-block">
+    <pre><span class="code-comment"># ukb-0-method-sib-dt-v00 · Power-Weighted TMVES Routing</span>
+
+<span class="code-keyword">def</span> <span class="code-func">sib_route</span>(power_curve, cognitive_weights, tmves_context):
+    reserve = power_curve.<span class="code-func">maintenance_minutes</span>()  <span class="code-comment"># 20–45 min window</span>
+
+    <span class="code-keyword">if</span> reserve &lt; <span class="code-num">5</span>:                              <span class="code-comment"># Scalar breach — floor violation</span>
+        <span class="code-keyword">return</span> <span class="code-string">"Anthropic"</span>, <span class="code-string">"escalate_human"</span>, <span class="code-string">"power_floor_violation"</span>
+
+    <span class="code-keyword">elif</span> reserve &lt; <span class="code-num">20</span> <span class="code-keyword">and</span> tmves_context == <span class="code-string">"emergency"</span>:
+        <span class="code-keyword">return</span> <span class="code-string">"OpenAI"</span>, <span class="code-string">"eigenmode_collapse"</span>, <span class="code-string">"structural_triage"</span>
+
+    <span class="code-keyword">elif</span> tmves_context == <span class="code-string">"outpatient"</span>:
+        <span class="code-keyword">return</span> <span class="code-string">"xAI"</span>, <span class="code-string">"matrix_narrative"</span>, <span class="code-string">"momentum_build"</span>
+
+    <span class="code-keyword">elif</span> tmves_context == <span class="code-string">"urgent"</span>:
+        <span class="code-keyword">return</span> <span class="code-string">"Google"</span>, <span class="code-string">"canonical_vector"</span>, <span class="code-string">"precedent_lookup"</span>
+
+    <span class="code-keyword">else</span>:
+        <span class="code-keyword">return</span> <span class="code-func">weighted_eigenmode</span>(power_curve, cognitive_weights)
+        <span class="code-comment"># Inpatient Tensor: all models, DT_cognitive + DT_somatic</span>
+
+<span class="code-comment"># The somatic DT does not feed the LLM. It gates it.</span>
+<span class="code-comment"># Output = Projection(model, DT_cognitive + DT_somatic, TMVES_context)</span></pre>
+  </div>
+</section>
+
+<!-- ══════════ FINAL FORMULA ══════════ -->
+<section class="reveal">
+  <div class="formula-block">
+    <div class="formula-text">
+      <span class="formula-highlight">Ukubona</span> = f(<span class="formula-gold">time</span>, <span class="formula-teal">stakes</span>, <span class="formula-highlight">user_loss_function</span>)<br>
+      → selects <span class="formula-gold">LLM lens</span><br>
+      → applied to <span class="formula-teal">digital twin state</span><br>
+      → gated by <span style="color:var(--ember)">somatic constraint field</span><br><br>
+      <span style="color:var(--muted);font-size:0.85rem;">The Eye doesn't need to be omniscient. It only needs to be perfectly timed.</span>
+    </div>
+  </div>
+
+  <div class="insight-grid">
+    <div class="insight-card" style="border-color:rgba(108,79,245,0.3)">
+      <div class="insight-label" style="color:var(--electric)">Compression → Intelligence</div>
+      <div class="insight-text">The brain stores the loss function, not the footage. LLMs store the weights, not the web. The DT stores the compression function, not the diary.</div>
+    </div>
+    <div class="insight-card" style="border-color:rgba(20,184,166,0.3)">
+      <div class="insight-label" style="color:var(--teal)">Constraints → Truth</div>
+      <div class="insight-text">Without the somatic tensor, hallucinations feel insightful. With it, physiological reality gates every projection before the LLM speaks.</div>
+    </div>
+    <div class="insight-card" style="border-color:rgba(245,200,66,0.3)">
+      <div class="insight-label" style="color:var(--gold)">Hallucination → Lens</div>
+      <div class="insight-text">The SIB doesn't ask "Is this true?" It asks "Is this lens appropriate for the current temporal phase?" Projection under insufficient constraints is a candidate lens, not an error.</div>
+    </div>
+    <div class="insight-card" style="border-color:rgba(239,68,68,0.3)">
+      <div class="insight-label" style="color:var(--ember)">Perfect Heart → Subscription</div>
+      <div class="insight-text">Monthly subscription = stable loss function = weights don't drift = Ukubona shews itself strong. Not theology. Churn reduction as epistemological infrastructure.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer class="reveal">
+  <div class="footer-eye">👁️</div>
+  <div class="footer-catalog">ukb-0-method-sib-dt-v00 · catalogued</div>
+  <div class="footer-name">Ukubona LLC · The Eye Shews Itself Strong</div>
+  <div style="margin-top:2rem;font-family:var(--font-mono);font-size:0.6rem;color:var(--faint);letter-spacing:0.2em;">
+    SIMPLE · CHEAP · PROFOUND · TMVES INVARIANT
+  </div>
+</footer>
+
+</div><!-- /wrapper -->
+
+<script>
+// ── SCROLL REVEAL ──
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(el => observer.observe(el));
+
+// ── STAGGER TMVES ITEMS ──
+document.querySelectorAll('.tmves-item').forEach((el, i) => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateX(-20px)';
+  el.style.transition = `opacity 0.5s ease ${i * 0.1}s, transform 0.5s ease ${i * 0.1}s`;
+});
+
+const tmvesObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('.tmves-item').forEach(item => {
+        item.style.opacity = '1';
+        item.style.transform = 'translateX(0)';
+      });
+    }
+  });
+}, { threshold: 0.1 });
+
+const tmvesStack = document.querySelector('.tmves-stack');
+if (tmvesStack) tmvesObserver.observe(tmvesStack);
+
+// ── COMPRESSION BAR ANIMATION ──
+const compObs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('.comp-bar').forEach(bar => {
+        const target = bar.style.width;
+        bar.style.width = '0';
+        bar.style.transition = 'width 1s ease 0.3s';
+        setTimeout(() => bar.style.width = target, 100);
+      });
+    }
+  });
+}, { threshold: 0.3 });
+
+const compVis = document.querySelector('.compression-visual');
+if (compVis) compObs.observe(compVis);
+
+// ── CURSOR EYE TRAIL ──
+const canvas = document.createElement('canvas');
+canvas.style.cssText = 'position:fixed;top:0;left:0;pointer-events:none;z-index:999;opacity:0.35;';
+document.body.appendChild(canvas);
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+let particles = [];
+let mouse = { x: -200, y: -200 };
+
+window.addEventListener('mousemove', e => {
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
+  for (let i = 0; i < 2; i++) {
+    particles.push({
+      x: mouse.x,
+      y: mouse.y,
+      vx: (Math.random() - 0.5) * 1.5,
+      vy: (Math.random() - 0.5) * 1.5,
+      life: 1,
+      size: Math.random() * 3 + 1,
+      color: Math.random() > 0.5 ? '108,79,245' : '20,184,166'
+    });
+  }
+});
+
+function animateParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles = particles.filter(p => p.life > 0);
+  particles.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.life -= 0.035;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${p.color},${p.life * 0.6})`;
+    ctx.fill();
+  });
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+</script>
+
+</body>
+</html>
